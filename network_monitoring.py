@@ -2,6 +2,7 @@ import os
 import logging
 import subprocess
 from time import sleep
+from typing import Tuple
 
 
 def bash_call(param: str) -> int:
@@ -58,7 +59,8 @@ def select_hotspot(device=select_device()) -> str:
     """run `nmcli c` and filtred by wifi and selected network adapter
 
     Args:
-        device (str, optional): selected network adapter. Defaults to select_device().
+        device (str, optional):
+            selected network adapter. Defaults to select_device().
 
     Returns:
         str: name wifi conection
@@ -90,7 +92,8 @@ def select_ip(device=select_device()) -> str:
     If wifi adapter is down - up it
 
     Args:
-        device (str, optional): selected network adapter. Defaults to select_device().
+        device (str, optional):
+            selected network adapter. Defaults to select_device().
 
     Returns:
         str: selected ip
@@ -120,14 +123,14 @@ def select_ip(device=select_device()) -> str:
     return selected_ip
 
 
-def local_ping(selected_ip: str) -> tuple(str, str):
+def local_ping(selected_ip: str) -> Tuple[str, str]:
     """ping ip and change it if ping is None
 
     Args:
         selected_ip (str): ip with min avg ping
 
     Returns:
-        tuple (str, str): (output ping, ip what ping)
+        Tuple[str, str]: (output ping, ip what ping)
     """
     dirty_avg = ping(selected_ip, '-c 5', 'grep /')
     if dirty_avg is None:
@@ -138,14 +141,14 @@ def local_ping(selected_ip: str) -> tuple(str, str):
     return dirty_avg, selected_ip
 
 
-def local_avg(selected_ip: str) -> tuple(float, str):
+def local_avg(selected_ip: str) -> Tuple[float, str]:
     """checks `local_ping` and filters the avg ping
 
     Args:
         selected_ip (str): ip with min avg ping
 
     Returns:
-        tuple(float, str): (avg ping, ip what ping)
+        Tuple[float, str]: (avg ping, ip what ping)
     """
     dirty_avg, selected_ip = local_ping(selected_ip)
     avg_local = float(dirty_avg.split('=')[1].split('/')[1])
